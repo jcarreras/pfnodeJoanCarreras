@@ -12,26 +12,26 @@ import {
 import { CreateResourceDto } from './dto/create-resource.dto';
 import { FindResourcesQueryDto } from './dto/find-resources-query.dto';
 import { UpdateResourceDto } from './dto/update-resource.dto';
-import type { Resource } from './resources.model';
+import { AssignResourceDto } from './dto/assign-resource.dto';
+import type { Resource } from './resource.entity';
 import { ResourcesService } from './resources.service';
 
 @Controller('resources')
 export class ResourcesController {
-
   constructor(private readonly resourcesService: ResourcesService) {}
 
   @Get()
-  findAll(@Query() query: FindResourcesQueryDto): Resource[] {
+  findAll(@Query() query: FindResourcesQueryDto): Promise<Resource[]> {
     return this.resourcesService.findAll(query);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): Resource {
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Resource> {
     return this.resourcesService.findOne(id);
   }
 
   @Post()
-  create(@Body() createResourceDto: CreateResourceDto): Resource {
+  create(@Body() createResourceDto: CreateResourceDto): Promise<Resource> {
     return this.resourcesService.create(createResourceDto);
   }
 
@@ -39,13 +39,26 @@ export class ResourcesController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateResourceDto: UpdateResourceDto,
-  ): Resource {
+  ): Promise<Resource> {
     return this.resourcesService.update(id, updateResourceDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number): Resource {
+  remove(@Param('id', ParseIntPipe) id: number): Promise<Resource> {
     return this.resourcesService.remove(id);
   }
 
+
+  @Patch(':id/assign')
+  assign(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() assignResourceDto: AssignResourceDto,
+  ): Promise<Resource> {
+    return this.resourcesService.assign(id, assignResourceDto);
+  }
+
+  @Patch(':id/release')
+  release(@Param('id', ParseIntPipe) id: number): Promise<Resource> {
+    return this.resourcesService.release(id);
+  }
 }

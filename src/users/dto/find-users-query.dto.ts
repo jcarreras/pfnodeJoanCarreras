@@ -1,6 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsIn, IsOptional } from 'class-validator';
-import { USER_ROLES, type UserRole } from '../user.model';
+import { USER_ROLES, type UserRole } from '../user.entity';
 
 export class FindUsersQueryDto {
   @IsOptional()

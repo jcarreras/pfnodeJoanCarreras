@@ -1,4 +1,4 @@
-export const USER_ROLES = ['admin', 'member'] as const;
+/* export const USER_ROLES = ['admin', 'member'] as const;
 
 export type UserRole = (typeof USER_ROLES)[number];
 
@@ -9,4 +9,5 @@ export interface User {
   role: UserRole;
   active: boolean;
   createdAt: string;
-}
+} */
+

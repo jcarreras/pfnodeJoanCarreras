@@ -1,12 +1,58 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import type { CreateUserDto } from './dto/create-user.dto';
 import type { FindUsersQueryDto } from './dto/find-users-query.dto';
 import type { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './user.model';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [
+
+  constructor(
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+  ) {}
+
+  findAll(query: FindUsersQueryDto): Promise<User[]> {
+    const { active, role } = query;
+    //  return this.usersRepository.find();
+    return this.usersRepository.findBy({
+      ...(active !== undefined && { active }),
+      ...(role !== undefined && { role }),
+    });
+  }
+
+  async findOne(id: number): Promise<User> {
+    const user = await this.usersRepository.findOneBy({ id });
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    return user;
+  }
+
+  create(createUserDto: CreateUserDto): Promise<User> {
+    const newUser = this.usersRepository.create({
+      ...createUserDto,
+      active: true,
+      createdAt: new Date().toISOString(),
+    });
+    return this.usersRepository.save(newUser);
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.findOne(id); // ja llança NotFoundException si no existeix
+    const updated = this.usersRepository.merge(user, updateUserDto);
+    return this.usersRepository.save(updated);
+  }
+
+  async remove(id: number): Promise<User> {
+    const user = await this.findOne(id); // ja llança NotFoundException si no existeix
+    return this.usersRepository.remove(user);
+  }
+}
+
+/*   private users: User[] = [
     {
       id: 1,
       name: 'Anna Serra',
@@ -15,9 +61,9 @@ export class UsersService {
       active: true,
       createdAt: new Date().toISOString(),
     },
-  ];
+  ]; */
 
-  findAll(query: FindUsersQueryDto): User[] {
+/*   findAll(query: FindUsersQueryDto): User[] {
     const { active, role } = query;
 
     return this.users.filter((user) => {
@@ -26,9 +72,11 @@ export class UsersService {
 
       return matchesActive && matchesRole;
     });
-  }
+  } */
 
-  findOne(id: number): User {
+
+
+/*   findOne(id: number): User {
     const user = this.users.find((currentUser) => currentUser.id === id);
 
     if (!user) {
@@ -36,9 +84,9 @@ export class UsersService {
     }
 
     return user;
-  }
+  } */
 
-  create(createUserDto: CreateUserDto): User {
+  /*   create(createUserDto: CreateUserDto): User {
     const newUser: User = {
       id: this.users.length + 1,
       name: createUserDto.name,
@@ -51,9 +99,10 @@ export class UsersService {
     this.users.push(newUser);
 
     return newUser;
-  }
+  } */
 
-  update(id: number, updateUserDto: UpdateUserDto): User {
+
+/*   update(id: number, updateUserDto: UpdateUserDto): User {
     const userIndex = this.users.findIndex((user) => user.id === id);
 
     if (userIndex === -1) {
@@ -77,9 +126,9 @@ export class UsersService {
     };
 
     return this.users[userIndex];
-  }
+  } */
 
-  remove(id: number): User {
+    /*   remove(id: number): User {
     const userIndex = this.users.findIndex((user) => user.id === id);
 
     if (userIndex === -1) {
@@ -89,5 +138,4 @@ export class UsersService {
     const [deletedUser] = this.users.splice(userIndex, 1);
 
     return deletedUser;
-  }
-}
+  } */

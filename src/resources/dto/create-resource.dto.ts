@@ -1,5 +1,5 @@
 import { IsIn, IsNotEmpty, IsString } from 'class-validator';
-import { RESOURCE_TYPES, RESOURCE_STATUS, type ResourceType, type ResourceStatus } from '../resources.model';
+import { RESOURCE_TYPES, RESOURCE_STATUS, type ResourceType, type ResourceStatus } from '../resource.entity';
 
 export class CreateResourceDto {
   @IsString()
@@ -13,3 +13,5 @@ export class CreateResourceDto {
   @IsNotEmpty()
   location: string;
 }
+
+
