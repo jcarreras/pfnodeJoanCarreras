@@ -65,3 +65,10 @@ MODUL_6.md
 database.sqlite
 *.sqlite
 *.sqlite3
+
+#Openai
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local

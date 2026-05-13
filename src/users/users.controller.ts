@@ -14,6 +14,8 @@ import { FindUsersQueryDto } from './dto/find-users-query.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import type { User } from './user.entity';
 import { UsersService } from './users.service';
+import { ParseResourceAssignmentDto } from './dto/parse-resource-assignment.dto';
+import type { Resource } from '../resources/resource.entity';
 
 @Controller('users')
 export class UsersController {
@@ -32,6 +34,15 @@ export class UsersController {
   @Post()
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
+  }
+
+  @Post('parse-resource-assignment')
+  parseResourceAssignment(
+    @Body() parseResourceAssignmentDto: ParseResourceAssignmentDto,
+  ): Promise<Resource> {
+    return this.usersService.parseResourceAssignment(
+      parseResourceAssignmentDto,
+    );
   }
 
   @Patch(':id')
