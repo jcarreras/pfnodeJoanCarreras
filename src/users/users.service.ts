@@ -86,7 +86,7 @@ export class UsersService {
   async parseResourceAssignment(
     parseResourceAssignmentDto: ParseResourceAssignmentDto,
   ): Promise<Resource> {
-    /* const response = await this.getClient().responses.create({
+     const response = await this.getClient().responses.create({
       model: this.model,
       input: [
         {
@@ -107,8 +107,7 @@ export class UsersService {
     const parsedAssignment = this.parseAssignmentJson(response.output_text);
     if ('error' in parsedAssignment) {
       throw new BadRequestException('userId and resourceId are required');
-    } */
-   const parsedAssignment = { userId: 1, resourceId: 3 };
+    }
     return this.resourcesService.assign(parsedAssignment.resourceId, {
       userId: parsedAssignment.userId,
     });
